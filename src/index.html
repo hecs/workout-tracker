@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1a1a1a">
+    <meta name="description" content="Track your workout progress">
+    
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/assets/favicon.svg">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+    
+    <title>Workout Tracker</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div id="app">
+        <div id="setup-screen" class="screen active">
+            <h1>Workout Tracker</h1>
+            <form id="setup-form">
+                <div class="form-group">
+                    <label for="pullups">Pullups</label>
+                    <input 
+                        type="number" 
+                        id="pullups" 
+                        name="pullups" 
+                        min="0" 
+                        value="40"
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="pushups">Pushups</label>
+                    <input 
+                        type="number" 
+                        id="pushups" 
+                        name="pushups" 
+                        min="0" 
+                        value="80" 
+                        required
+                    >
+                </div>
+                
+                <div class="form-group">
+                    <label for="squats">Squats</label>
+                    <input 
+                        type="number" 
+                        id="squats" 
+                        name="squats" 
+                        min="0" 
+                        value="120" 
+                        required
+                    >
+                </div>
+                
+                <button type="submit" class="btn btn-primary btn-large">Start Workout</button>
+            </form>
+        </div>
+
+        <div id="workout-screen" class="screen">
+            <div class="header">
+                <h1>Workout</h1>
+                <div class="timer-section">
+                    <span id="timer-display" class="timer-display">0:00</span>
+                    <button id="timer-btn" class="btn btn-secondary btn-small">⏸ Pause</button>
+                </div>
+                <button id="reset-btn" class="btn btn-secondary btn-small">Reset</button>
+            </div>
+
+            <div class="progress-grid">
+                <div class="progress-card" data-exercise="pullups">
+                    <h2>Pullups</h2>
+                    <div class="reps-display">
+                        <span class="current">0</span>
+                        <span class="separator">/</span>
+                        <span class="total">0</span>
+                        <span class="bonus">+0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-minus" data-value="-1">-1</button>
+                        <button class="btn btn-minus" data-value="-5">-5</button>
+                        <button class="btn btn-minus" data-value="-10">-10</button>
+                    </div>
+                </div>
+
+                <div class="progress-card" data-exercise="pushups">
+                    <h2>Pushups</h2>
+                    <div class="reps-display">
+                        <span class="current">0</span>
+                        <span class="separator">/</span>
+                        <span class="total">0</span>
+                        <span class="bonus">+0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-minus" data-value="-1">-1</button>
+                        <button class="btn btn-minus" data-value="-5">-5</button>
+                        <button class="btn btn-minus" data-value="-10">-10</button>
+                    </div>
+                </div>
+
+                <div class="progress-card" data-exercise="squats">
+                    <h2>Squats</h2>
+                    <div class="reps-display">
+                        <span class="current">0</span>
+                        <span class="separator">/</span>
+                        <span class="total">0</span>
+                        <span class="bonus">+0</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="button-group">
+                        <button class="btn btn-minus" data-value="-1">-1</button>
+                        <button class="btn btn-minus" data-value="-5">-5</button>
+                        <button class="btn btn-minus" data-value="-10">-10</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="complete-screen" class="screen">
+            <div class="complete-message">
+                <h1>🎉 Workout Complete!</h1>
+                <p>Great work!</p>
+                <button id="new-workout-btn" class="btn btn-primary btn-large">Start New Workout</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/main.ts"></script>
+</body>
+</html>

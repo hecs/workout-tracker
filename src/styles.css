@@ -1,0 +1,354 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-primary: #ff6b6b;
+    --color-secondary: #4a4a4a;
+    --color-success: #51cf66;
+    --color-bg: #1a1a1a;
+    --color-surface: #2d2d2d;
+    --color-text: #ffffff;
+    --color-text-muted: #b0b0b0;
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --radius: 8px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    line-height: 1.6;
+}
+
+#app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.screen {
+    display: none;
+    flex: 1;
+    padding: var(--spacing-lg);
+    max-width: 500px;
+    margin: 0 auto;
+    width: 100%;
+    animation: fadeIn 0.3s ease-in;
+}
+
+.screen.active {
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Setup Screen */
+#setup-screen {
+    justify-content: center;
+}
+
+#setup-screen h1 {
+    text-align: center;
+    margin-bottom: var(--spacing-xl);
+    font-size: 28px;
+}
+
+#setup-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-lg);
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--color-text-muted);
+}
+
+.form-group input {
+    padding: var(--spacing-md);
+    border: 2px solid var(--color-surface);
+    border-radius: var(--radius);
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    font-size: 18px;
+    font-weight: 600;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+}
+
+/* Workout Screen */
+#workout-screen {
+    flex-direction: column;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-lg);
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+}
+
+.header h1 {
+    font-size: 24px;
+    flex: 1;
+}
+
+.timer-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    background-color: var(--color-surface);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius);
+}
+
+.timer-display {
+    font-size: 20px;
+    font-weight: 600;
+    font-family: 'Courier New', monospace;
+    min-width: 60px;
+    color: var(--color-primary);
+}
+
+
+.progress-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+    flex: 1;
+}
+
+@media (min-width: 600px) {
+    .progress-grid {
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    }
+}
+
+.progress-card {
+    background-color: var(--color-surface);
+    border-radius: var(--radius);
+    padding: var(--spacing-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.progress-card:has(.progress-fill[style*=" 0%"]) {
+    outline: 2px solid var(--color-success);
+}
+
+.progress-card h2 {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.reps-display {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: var(--spacing-md);
+    font-size: 32px;
+    font-weight: 700;
+}
+
+.reps-display .current {
+    color: var(--color-primary);
+}
+
+.reps-display .current.complete {
+    color: #51cf66;
+    font-weight: 700;
+}
+
+.reps-display .separator {
+    font-size: 20px;
+    color: var(--color-text-muted);
+}
+
+.reps-display .total {
+    color: var(--color-text-muted);
+    font-size: 24px;
+}
+
+.reps-display .bonus {
+    color: #51cf66;
+    font-weight: 700;
+    font-size: 18px;
+    margin-left: 12px;
+    display: inline-block;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.reps-display .bonus.show {
+    animation: bonusReps 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes bonusReps {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) rotate(-15deg);
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1.1) rotate(8deg);
+    }
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background-color: var(--color-bg);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), #ff8787);
+    transition: width 0.2s ease;
+    width: 0%;
+}
+
+.button-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--spacing-sm);
+}
+
+/* Buttons */
+.btn {
+    padding: var(--spacing-md);
+    border: none;
+    border-radius: var(--radius);
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    active: none;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.btn-primary:active {
+    background-color: #ff5252;
+}
+
+.btn-secondary {
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+}
+
+.btn-secondary:active {
+    background-color: #3a3a3a;
+}
+
+.btn-minus {
+    background-color: var(--color-secondary);
+    color: var(--color-text);
+    padding: var(--spacing-md) var(--spacing-sm);
+    font-size: 14px;
+    pointer-events: auto;
+    cursor: pointer;
+    border: none;
+    flex: 1;
+}
+
+.btn-minus:active {
+    background-color: var(--color-primary);
+}
+
+.btn-large {
+    padding: var(--spacing-lg) var(--spacing-xl);
+    font-size: 18px;
+}
+
+.btn-small {
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: 14px;
+}
+
+/* Complete Screen */
+#complete-screen {
+    justify-content: center;
+    align-items: center;
+}
+
+.complete-message {
+    text-align: center;
+}
+
+.complete-message h1 {
+    font-size: 36px;
+    margin-bottom: var(--spacing-lg);
+}
+
+.complete-message p {
+    font-size: 18px;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .screen {
+        padding: var(--spacing-md);
+    }
+
+    #setup-screen h1 {
+        font-size: 24px;
+    }
+
+    .reps-display {
+        font-size: 24px;
+    }
+
+    .reps-display .current {
+        font-size: 28px;
+    }
+
+    .progress-card {
+        padding: var(--spacing-md);
+    }
+}

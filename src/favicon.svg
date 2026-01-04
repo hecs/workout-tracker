@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 192 192">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0d0d0d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="fistGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff00ff;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="glowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ff00ff;stop-opacity:0.3" />
+      <stop offset="100%" style="stop-color:#00ffff;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="192" height="192" fill="url(#bgGrad)" rx="45"/>
+
+  <!-- Glow effect -->
+  <circle cx="96" cy="96" r="80" fill="url(#glowGrad)"/>
+
+  <!-- Outer power ring -->
+  <circle cx="96" cy="96" r="75" fill="none" stroke="#00ffff" stroke-width="2" opacity="0.4"/>
+  <circle cx="96" cy="96" r="70" fill="none" stroke="#ff00ff" stroke-width="1.5" opacity="0.3"/>
+
+  <!-- Fist (closed hand showing strength) -->
+  <!-- Forearm/wrist -->
+  <rect x="75" y="110" width="42" height="35" rx="6" fill="url(#fistGrad)" filter="drop-shadow(0 4px 12px rgba(0, 255, 255, 0.3))"/>
+
+  <!-- Hand/fist base -->
+  <rect x="70" y="85" width="52" height="32" rx="8" fill="url(#fistGrad)" filter="drop-shadow(0 4px 12px rgba(255, 0, 255, 0.3))"/>
+
+  <!-- Thumb -->
+  <ellipse cx="120" cy="90" rx="9" ry="14" fill="#00ffff" transform="rotate(-35 120 90)" filter="drop-shadow(0 2px 6px rgba(0, 255, 255, 0.4))"/>
+
+  <!-- Knuckles definition -->
+  <circle cx="80" cy="85" r="6" fill="#ff00ff" opacity="0.8"/>
+  <circle cx="96" cy="85" r="6" fill="#ff00ff" opacity="0.8"/>
+  <circle cx="112" cy="85" r="6" fill="#ff00ff" opacity="0.8"/>
+
+  <!-- Power lightning accents on fist -->
+  <path d="M 85 75 L 88 65 L 82 62 L 90 55" stroke="#ffff00" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.9"/>
+  <path d="M 110 75 L 107 65 L 113 62 L 105 55" stroke="#ffff00" stroke-width="2.5" fill="none" stroke-linecap="round" opacity="0.9"/>
+
+  <!-- Energy waves radiating outward -->
+  <circle cx="96" cy="96" r="85" fill="none" stroke="#00ffff" stroke-width="1.5" opacity="0.2" stroke-dasharray="5,5"/>
+  
+  <!-- Center power dot -->
+  <circle cx="96" cy="96" r="3" fill="#ffff00" opacity="0.8"/>
+</svg>
