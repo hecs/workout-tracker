@@ -1,14 +1,13 @@
-const CACHE_NAME = 'cindy-v1';
+const CACHE_VERSION = '1';
+const CACHE_NAME = `cindy-v${CACHE_VERSION}`;
 
-// Install event
+// Install event - take over immediately
 self.addEventListener('install', (event) => {
-    console.log('Service worker installing');
     self.skipWaiting();
 });
 
-// Activate event
+// Activate event - clean old caches and claim clients immediately
 self.addEventListener('activate', (event) => {
-    console.log('Service worker activating');
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
@@ -21,6 +20,14 @@ self.addEventListener('activate', (event) => {
         })
     );
     self.clients.claim();
+});
+
+// Message event - handle update requests from clients
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+});
 });
 
 // Fetch event - Network first for HTML/JS/CSS, cache first for static assets

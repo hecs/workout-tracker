@@ -91,7 +91,28 @@ if (document.readyState === 'loading') {
 
 // Service worker (optional, non-blocking)
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {
+  navigator.serviceWorker.register('/sw.js').then((registration) => {
+    // Check for updates periodically
+    setInterval(() => {
+      registration.update();
+    }, 60000); // Check every minute
+
+    // Listen for updates
+    registration.addEventListener('updatefound', () => {
+      const newWorker = registration.installing;
+      if (newWorker) {
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'activated') {
+            // New service worker is ready - notify user
+            if (confirm('App update available! Refresh to get the latest version?')) {
+              newWorker.postMessage({ type: 'SKIP_WAITING' });
+              window.location.reload();
+            }
+          }
+        });
+      }
+    });
+  }).catch(() => {
     // Service worker registration failed - app will still work
   });
 }
