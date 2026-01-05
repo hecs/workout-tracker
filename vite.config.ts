@@ -1,6 +1,6 @@
 import { defineConfig } from 'vite'
 
-export default defineConfig({
+export const getViteConfig = () => ({
   base: '/workout-tracker/',
   root: 'src',
   build: {
@@ -15,3 +15,5 @@ export default defineConfig({
     open: true
   }
 })
+
+export default defineConfig(getViteConfig())
