@@ -1,0 +1,15 @@
+FROM node:20
+
+WORKDIR /app
+
+# Copy files
+COPY package.json package-lock.json ./
+COPY src ./src
+COPY tests ./tests
+COPY vitest.config.ts tsconfig.json ./
+
+# Install dependencies
+RUN npm install
+
+# Run tests
+CMD ["npm", "run", "test"]
