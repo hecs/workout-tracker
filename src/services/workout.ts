@@ -159,7 +159,7 @@ export function completeWorkout(): void {
     squats: { total: 0, current: 0, originalTarget: 0 },
   };
   resetForm();
-  showScreen('setup-screen');
+  showScreen('complete-screen');
 }
 
 export function newWorkout(): void {
@@ -196,18 +196,8 @@ export function updateUI(): void {
     updateRepsDisplay(exercise, current, total, originalTarget);
   });
 
-  // Check if complete: all exercises have current == 0 and total > 0
-  const isComplete =
-    state.pullups.current === 0 &&
-    state.pushups.current === 0 &&
-    state.squats.current === 0 &&
-    state.pullups.total > 0 &&
-    state.pushups.total > 0 &&
-    state.squats.total > 0;
-
-  if (isComplete) {
-    showScreen('complete-screen');
-  }
+  // Completion is only triggered when user clicks "Workout's DONE!" in the dialog
+  // This allows users to continue with bonus reps even after reaching 0
 }
 
 export function loadWorkoutState(): void {
