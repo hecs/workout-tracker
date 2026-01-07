@@ -58,48 +58,31 @@ export function showScreen(screenId: 'setup-screen' | 'workout-screen' | 'comple
 }
 
 export function updateRepsDisplay(exercise: string, current: number, total: number, originalTarget?: number) {
-  try {
-    const currentEl = dom.currentReps(exercise);
-    const totalEl = dom.totalReps(exercise);
-    const bonusEl = dom.bonus(exercise);
-    const progressEl = dom.progressBar(exercise);
+  const currentEl = dom.currentReps(exercise);
+  const totalEl = dom.totalReps(exercise);
+  const bonusEl = dom.bonus(exercise);
+  const progressEl = dom.progressBar(exercise);
 
-    if (!currentEl || !totalEl) {
-      return;
-    }
+  if (!currentEl || !totalEl) return;
 
-    if (currentEl) {
-      currentEl.textContent = String(current);
-      // Show in green when current reaches 0
-      if (current === 0) {
-        currentEl.classList.add('complete');
-      } else {
-        currentEl.classList.remove('complete');
-      }
-    }
-    if (totalEl) totalEl.textContent = String(total);
+  currentEl.textContent = String(current);
+  if (current === 0) {
+    currentEl.classList.add('complete');
+  } else {
+    currentEl.classList.remove('complete');
+  }
 
-    // Update bonus reps display
-    // Bonus = how much total was increased from the original target
-    if (bonusEl && originalTarget !== undefined) {
-      const bonusReps = Math.max(0, total - originalTarget);
-      
-      if (bonusReps > 0) {
-        bonusEl.textContent = `+${bonusReps}`;
-        bonusEl.classList.add('show');
-      } else {
-        bonusEl.textContent = '+0';
-        bonusEl.classList.remove('show');
-      }
-    }
+  totalEl.textContent = String(total);
 
-    if (progressEl) {
-      const totalReps = total || 1;
-      const percentage = Math.min((current / totalReps) * 100, 100);
-      progressEl.style.width = percentage + '%';
-    }
-  } catch (e) {
-    console.error(`Error updating ${exercise}:`, e);
+  if (bonusEl && originalTarget !== undefined) {
+    const bonusReps = Math.max(0, total - originalTarget);
+    bonusEl.textContent = bonusReps > 0 ? `+${bonusReps}` : '+0';
+    bonusEl.classList.toggle('show', bonusReps > 0);
+  }
+
+  if (progressEl) {
+    const percentage = Math.min((current / (total || 1)) * 100, 100);
+    progressEl.style.width = percentage + '%';
   }
 }
 

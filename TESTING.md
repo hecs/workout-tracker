@@ -18,53 +18,11 @@ npm run test:coverage # Coverage report
 
 ## Test Coverage (62 tests)
 
-```
-tests/
-├── unit/
-│   ├── workout.test.ts    # Decrement logic, bonus reps (9 tests)
-│   ├── storage.test.ts    # Save/load/clear (8 tests)
-│   └── completion.test.ts # Dialog, forms (9 tests)
-│
-└── integration/
-    ├── dom.test.ts         # Display updates (11 tests)
-    ├── completion.test.ts  # Dialog flow (8 tests)
-    └── workflows.test.ts   # Full workflows, timer persistence (17 tests)
-```
-
-### Test Breakdown
-
-**9 Unit Tests** - Workout logic
-- Decrement exercises & bonus rep calculation
-- Smart split when crossing zero boundary
-- Error handling for unknown exercises
-
-**8 Storage Tests** - Data persistence
-- Save/load/clear session state
-- Save/load last reps
-- Handle corrupted localStorage data
-
-**11 DOM Tests** - Display updates
-- Reps display rendering
-- Progress bar calculations
-- Form input parsing
-- Screen visibility
-
-**9 Completion Tests** - Dialog & forms
-- Dialog show/hide
-- Form value setters
-- Button elements
-- Last reps memory
-
-**17 Workflow Tests** - Full user flows
-- Complete workout flow (start → decrement → complete)
-- Bonus reps after reaching 0
-- Split calculation across zero
-- Dialog interactions (complete, reset, cancel)
-- Timer toggle (start, pause, resume)
-- State persistence (save/load)
-- **Timer persistence** - Elapsed time continues on reload ⭐ NEW
-- Last reps pre-fill for next workout
-- Reload scenarios
+- 9 unit tests - Workout logic
+- 8 storage tests - Data persistence
+- 11 DOM tests - Display updates
+- 9 completion tests - Dialog & forms
+- 17 workflow tests - Full flows including timer persistence
 
 ## Why Vitest + Happy-DOM?
 

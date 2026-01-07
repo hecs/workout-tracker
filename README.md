@@ -111,10 +111,9 @@ Uses **Vitest** with **happy-dom** for speed.
 ## Development
 
 ```bash
-npm install              # Install dependencies
-npm run dev             # Dev server (http://localhost:5173)
-npm run build           # Build for production
-npm run preview         # Preview production build
+npm install    # Install dependencies
+npm run dev   # Dev server (http://localhost:5173)
+npm run build # Production build
 ```
 
 ## Deployment
