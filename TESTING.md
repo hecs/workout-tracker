@@ -1,6 +1,152 @@
 # Testing Guide
 
-This project uses a comprehensive testing strategy with unit, integration, and E2E tests.
+Comprehensive testing strategy: **62 fast unit + integration tests** (~380ms). No slow E2E tests.
+
+## Test Stack
+
+- **Vitest 4.0** - Fast test runner (~380ms for 62 tests)
+- **Happy-DOM 20.0** - Lightweight DOM (perfect for this app)
+- **Testing Library** - DOM testing utilities
+
+## Running Tests
+
+```bash
+npm run test          # Single run (62 tests, ~380ms)
+npm run test:watch   # Watch mode
+npm run test:coverage # Coverage report
+```
+
+## Test Coverage (62 tests)
+
+```
+tests/
+├── unit/
+│   ├── workout.test.ts    # Decrement logic, bonus reps (9 tests)
+│   ├── storage.test.ts    # Save/load/clear (8 tests)
+│   └── completion.test.ts # Dialog, forms (9 tests)
+│
+└── integration/
+    ├── dom.test.ts         # Display updates (11 tests)
+    ├── completion.test.ts  # Dialog flow (8 tests)
+    └── workflows.test.ts   # Full workflows, timer persistence (17 tests)
+```
+
+### Test Breakdown
+
+**9 Unit Tests** - Workout logic
+- Decrement exercises & bonus rep calculation
+- Smart split when crossing zero boundary
+- Error handling for unknown exercises
+
+**8 Storage Tests** - Data persistence
+- Save/load/clear session state
+- Save/load last reps
+- Handle corrupted localStorage data
+
+**11 DOM Tests** - Display updates
+- Reps display rendering
+- Progress bar calculations
+- Form input parsing
+- Screen visibility
+
+**9 Completion Tests** - Dialog & forms
+- Dialog show/hide
+- Form value setters
+- Button elements
+- Last reps memory
+
+**17 Workflow Tests** - Full user flows
+- Complete workout flow (start → decrement → complete)
+- Bonus reps after reaching 0
+- Split calculation across zero
+- Dialog interactions (complete, reset, cancel)
+- Timer toggle (start, pause, resume)
+- State persistence (save/load)
+- **Timer persistence** - Elapsed time continues on reload ⭐ NEW
+- Last reps pre-fill for next workout
+- Reload scenarios
+
+## Why Vitest + Happy-DOM?
+
+- **Speed:** 62 tests in ~380ms (vs 10+ seconds for Playwright)
+- **Perfect fit:** App doesn't need complex browser simulation
+- **Reliable:** No timing issues, no flakiness
+- **Integration tests cover all flows:** Full workflows without browser overhead
+
+## Adding New Tests
+
+### Example: Timer Persistence Test
+```typescript
+it('should restore elapsed time when reloading workout', () => {
+  // Start workout
+  const mockEvent = new Event('submit') as Event;
+  startWorkout(mockEvent, () => ({ pullups: 10, pushups: 15, squats: 20 }));
+
+  // Simulate time passage
+  state.elapsedTime = 5000; // 5 seconds
+  saveSession(state);
+
+  // Reset and reload
+  state.elapsedTime = 0;
+  loadWorkoutState();
+
+  // Timer should be restored
+  expect(state.elapsedTime).toBe(5000);
+});
+```
+
+## Test Setup Pattern
+
+```typescript
+beforeEach(() => {
+  localStorage.clear();        // Clean storage
+  state.pullups = {...};       // Reset state
+  vi.clearAllMocks();          // Clear mocks
+});
+```
+
+## Mocking Examples
+
+```typescript
+// Mock confirm dialog
+vi.stubGlobal('confirm', () => true);  // User clicks OK
+resetWorkout();
+
+vi.stubGlobal('confirm', () => false); // User clicks Cancel
+resetWorkout();
+```
+
+## CI/CD
+
+Tests run on every push:
+1. GitHub Actions triggers
+2. `npm run test` runs all 62 tests
+3. Must pass to deploy
+4. Deploys to GitHub Pages if successful
+
+## Performance
+
+- **Target:** <500ms for all tests
+- **Actual:** ~380ms for 62 tests
+- **Fast iteration:** Instant feedback while developing
+
+## Why No E2E Tests?
+
+Removed slow Playwright E2E tests because:
+1. **Speed:** Integration tests run 60x faster
+2. **Reliability:** No browser flakiness
+3. **Coverage:** Integration tests cover all flows
+4. **CI/CD:** Faster feedback loop
+
+Integration tests are ideal for this app's complexity.
+
+## Resources
+
+- [Vitest](https://vitest.dev/)
+- [Happy-DOM](https://github.com/capricorn86/happy-dom)
+- [Testing Library](https://testing-library.com/)
+
+````
 
 ## Test Stack
 
