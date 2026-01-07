@@ -125,6 +125,7 @@ export function decrementExercise(exercise: string, amount: number): void {
 }
 
 export function resetWorkout(): void {
+  hideCompletionDialog();
   if (confirm('Reset this workout?')) {
     clearSession();
     stopTimer();
@@ -139,7 +140,6 @@ export function resetWorkout(): void {
 }
 
 export function showEndWorkoutDialog(): void {
-  hideCompletionDialog();
   showCompletionDialog();
 }
 
