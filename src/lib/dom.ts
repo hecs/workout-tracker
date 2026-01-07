@@ -14,9 +14,14 @@ export const dom = {
   squatInput: () => document.getElementById('squats') as HTMLInputElement,
 
   // Buttons
-  resetBtn: () => document.getElementById('reset-btn') as HTMLButtonElement,
+  completeBtn: () => document.getElementById('complete-btn') as HTMLButtonElement,
   newWorkoutBtn: () => document.getElementById('new-workout-btn') as HTMLButtonElement,
   timerBtn: () => document.getElementById('timer-btn') as HTMLButtonElement,
+
+  // Dialog
+  completionDialog: () => document.getElementById('completion-dialog') as HTMLDivElement,
+  dialogResetBtn: () => document.getElementById('dialog-reset-btn') as HTMLButtonElement,
+  dialogDoneBtn: () => document.getElementById('dialog-done-btn') as HTMLButtonElement,
 
   // Timer
   timerDisplay: () => document.getElementById('timer-display') as HTMLSpanElement,
@@ -125,4 +130,28 @@ export function updateTimerButton(isPaused: boolean): void {
   if (btn) {
     btn.textContent = isPaused ? '▶ Resume' : '⏸ Pause';
   }
+}
+
+export function showCompletionDialog(): void {
+  const dialog = dom.completionDialog();
+  if (dialog) {
+    dialog.classList.remove('hidden');
+  }
+}
+
+export function hideCompletionDialog(): void {
+  const dialog = dom.completionDialog();
+  if (dialog) {
+    dialog.classList.add('hidden');
+  }
+}
+
+export function setFormValues(pullups: number, pushups: number, squats: number): void {
+  const pullupInput = dom.pullupInput();
+  const pushupInput = dom.pushupInput();
+  const squatInput = dom.squatInput();
+
+  if (pullupInput) pullupInput.value = pullups.toString();
+  if (pushupInput) pushupInput.value = pushups.toString();
+  if (squatInput) squatInput.value = squats.toString();
 }

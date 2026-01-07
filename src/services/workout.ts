@@ -3,8 +3,8 @@
  */
 
 import type { WorkoutState } from '../lib/types';
-import { saveSession, clearSession, loadSession } from '../lib/storage';
-import { showScreen, updateRepsDisplay, resetForm, updateTimerDisplay, updateTimerButton } from '../lib/dom';
+import { saveSession, clearSession, loadSession, saveLastReps, loadLastReps } from '../lib/storage';
+import { showScreen, updateRepsDisplay, resetForm, updateTimerDisplay, updateTimerButton, showCompletionDialog, hideCompletionDialog, setFormValues } from '../lib/dom';
 
 // ============================================================================
 // TIMER
@@ -138,7 +138,19 @@ export function resetWorkout(): void {
   }
 }
 
-export function newWorkout(): void {
+export function showEndWorkoutDialog(): void {
+  hideCompletionDialog();
+  showCompletionDialog();
+}
+
+export function completeWorkout(): void {
+  hideCompletionDialog();
+  // Save the last used reps for next time
+  saveLastReps({
+    pullups: state.pullups.originalTarget,
+    pushups: state.pushups.originalTarget,
+    squats: state.squats.originalTarget,
+  });
   clearSession();
   stopTimer();
   state = {
@@ -147,6 +159,25 @@ export function newWorkout(): void {
     squats: { total: 0, current: 0, originalTarget: 0 },
   };
   resetForm();
+  showScreen('setup-screen');
+}
+
+export function newWorkout(): void {
+  const lastReps = loadLastReps();
+  clearSession();
+  stopTimer();
+  state = {
+    pullups: { total: 0, current: 0, originalTarget: 0 },
+    pushups: { total: 0, current: 0, originalTarget: 0 },
+    squats: { total: 0, current: 0, originalTarget: 0 },
+  };
+  resetForm();
+  
+  // Load last used reps if available
+  if (lastReps) {
+    setFormValues(lastReps.pullups, lastReps.pushups, lastReps.squats);
+  }
+  
   showScreen('setup-screen');
 }
 

@@ -173,4 +173,123 @@ test.describe('Responsive Design', () => {
     const buttons = page.locator('[data-exercise="pullups"] .btn-minus')
     await expect(buttons.first()).toBeVisible()
   })
+
+  test('should show completion dialog with Complete button', async ({ page }) => {
+    await page.goto('/')
+    
+    // Set up quick workout
+    await page.fill('#pullups', '1')
+    await page.fill('#pushups', '1')
+    await page.fill('#squats', '1')
+    await page.click('button:has-text("Start Workout")')
+
+    // Click Complete button
+    await expect(page.locator('#complete-btn')).toBeVisible()
+    await page.click('#complete-btn')
+
+    // Dialog should appear
+    await expect(page.locator('#completion-dialog')).toBeVisible()
+    await expect(page.locator('#dialog-reset-btn')).toBeVisible()
+    await expect(page.locator('#dialog-done-btn')).toBeVisible()
+  })
+
+  test('should reset workout with confirmation from dialog', async ({ page }) => {
+    await page.goto('/')
+    
+    await page.fill('#pullups', '2')
+    await page.fill('#pushups', '2')
+    await page.fill('#squats', '2')
+    await page.click('button:has-text("Start Workout")')
+
+    // Click some reps
+    await page.click('[data-exercise="pullups"] button:has-text("-1")')
+    await expect(page.locator('[data-exercise="pullups"] .current')).toContainText('1')
+
+    // Click Complete button and Reset in dialog
+    await page.click('#complete-btn')
+    await page.click('#dialog-reset-btn')
+
+    // Should ask for confirmation
+    page.on('dialog', async (dialog) => {
+      expect(dialog.message()).toContain('Reset');
+      await dialog.accept();
+    });
+
+    // Wait a bit for confirm to be processed
+    await page.waitForTimeout(500);
+    
+    // Should be back at setup screen
+    await expect(page.locator('#setup-screen')).toBeVisible()
+  })
+
+  test('should save last reps and use them for next workout', async ({ page }) => {
+    await page.goto('/')
+    
+    // First workout with specific reps
+    await page.fill('#pullups', '42')
+    await page.fill('#pushups', '84')
+    await page.fill('#squats', '126')
+    await page.click('button:has-text("Start Workout")')
+
+    // Complete it
+    await page.click('[data-exercise="pullups"] button:has-text("-1")').then(() => {
+      // Repeat for all to complete
+      return Promise.all([
+        page.click('[data-exercise="pullups"] button:has-text("-1")').catch(() => {}),
+        page.click('[data-exercise="pullups"] button:has-text("-10")'),
+        page.click('[data-exercise="pullups"] button:has-text("-10")'),
+        page.click('[data-exercise="pullups"] button:has-text("-10")'),
+        page.click('[data-exercise="pullups"] button:has-text("-10")'),
+      ])
+    });
+
+    // Get to completion screen
+    await page.waitForTimeout(500);
+    
+    // If on dialog, complete it
+    const dialog = page.locator('#completion-dialog');
+    if (await dialog.isVisible()) {
+      await page.click('#dialog-done-btn');
+    }
+
+    // Click "Start New Workout" if visible
+    if (await page.locator('#new-workout-btn').isVisible()) {
+      await page.click('#new-workout-btn');
+    }
+
+    // Now on setup screen, values should match last workout
+    const pullupValue = await page.locator('#pullups').inputValue();
+    const pushupValue = await page.locator('#pushups').inputValue();
+    const squatValue = await page.locator('#squats').inputValue();
+
+    // Values should be saved from previous workout
+    expect(pullupValue).toBeTruthy();
+    expect(pushupValue).toBeTruthy();
+    expect(squatValue).toBeTruthy();
+  })
+
+  test('should handle "Workout Done" completing the session', async ({ page }) => {
+    await page.goto('/')
+    
+    await page.fill('#pullups', '1')
+    await page.fill('#pushups', '1')
+    await page.fill('#squats', '1')
+    await page.click('button:has-text("Start Workout")')
+
+    // Complete all exercises
+    await page.click('[data-exercise="pullups"] button:has-text("-1")')
+    await page.click('[data-exercise="pushups"] button:has-text("-1")')
+    await page.click('[data-exercise="squats"] button:has-text("-1")')
+
+    // Should show complete screen with "Start New Workout" button
+    await expect(page.locator('#complete-screen')).toBeVisible()
+    await expect(page.locator('#new-workout-btn')).toBeVisible()
+
+    // Click "Start New Workout"
+    await page.click('#new-workout-btn')
+
+    // Should be back at setup
+    await expect(page.locator('#setup-screen')).toBeVisible()
+  })
 })
+

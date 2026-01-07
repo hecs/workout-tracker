@@ -6,6 +6,8 @@ import {
   newWorkout,
   loadWorkoutState,
   toggleTimer,
+  showEndWorkoutDialog,
+  completeWorkout,
 } from './services/workout';
 
 // ============================================================================
@@ -20,15 +22,33 @@ function setupEventListeners(): void {
     console.error('Setup form not found');
   }
 
-  // Reset button
-  const resetBtn = dom.resetBtn();
-  if (resetBtn) {
-    resetBtn.addEventListener('click', (e: Event) => {
+  // Complete button (formerly Reset) - shows dialog
+  const completeBtn = dom.completeBtn();
+  if (completeBtn) {
+    completeBtn.addEventListener('click', (e: Event) => {
+      e.preventDefault();
+      showEndWorkoutDialog();
+    });
+  } else {
+    console.error('Complete button not found');
+  }
+
+  // Dialog Reset button
+  const dialogResetBtn = dom.dialogResetBtn();
+  if (dialogResetBtn) {
+    dialogResetBtn.addEventListener('click', (e: Event) => {
       e.preventDefault();
       resetWorkout();
     });
-  } else {
-    console.error('Reset button not found');
+  }
+
+  // Dialog Done button
+  const dialogDoneBtn = dom.dialogDoneBtn();
+  if (dialogDoneBtn) {
+    dialogDoneBtn.addEventListener('click', (e: Event) => {
+      e.preventDefault();
+      completeWorkout();
+    });
   }
 
   // New workout button

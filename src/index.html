@@ -65,7 +65,7 @@
                     <span id="timer-display" class="timer-display">0:00</span>
                     <button id="timer-btn" class="btn btn-secondary btn-small">⏸ Pause</button>
                 </div>
-                <button id="reset-btn" class="btn btn-secondary btn-small">Reset</button>
+                <button id="complete-btn" class="btn btn-secondary btn-small">Complete</button>
             </div>
 
             <div class="progress-grid">
@@ -130,6 +130,18 @@
                 <h1>🎉 Workout Complete!</h1>
                 <p>Great work!</p>
                 <button id="new-workout-btn" class="btn btn-primary btn-large">Start New Workout</button>
+            </div>
+        </div>
+
+        <!-- Completion dialog -->
+        <div id="completion-dialog" class="dialog-overlay hidden">
+            <div class="dialog">
+                <h2>End Workout</h2>
+                <p>What would you like to do?</p>
+                <div class="dialog-buttons">
+                    <button id="dialog-reset-btn" class="btn btn-secondary">Reset</button>
+                    <button id="dialog-done-btn" class="btn btn-primary">Workout's DONE!</button>
+                </div>
             </div>
         </div>
     </div>
