@@ -17,6 +17,7 @@
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
     "test:e2e": "playwright test",
+    "test:e2e:local": "playwright test --config=playwright.local.ts",
     "test:e2e:debug": "playwright test --debug",
     "test:all": "npm run test && npm run test:e2e"
   },

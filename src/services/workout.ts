@@ -165,14 +165,14 @@ export function updateUI(): void {
     updateRepsDisplay(exercise, current, total, originalTarget);
   });
 
-  // Check if complete
+  // Check if complete: all exercises have current == 0 and total > 0
   const isComplete =
+    state.pullups.current === 0 &&
+    state.pushups.current === 0 &&
+    state.squats.current === 0 &&
     state.pullups.total > 0 &&
     state.pushups.total > 0 &&
-    state.squats.total > 0 &&
-    state.pullups.current >= state.pullups.total &&
-    state.pushups.current >= state.pushups.total &&
-    state.squats.current >= state.squats.total;
+    state.squats.total > 0;
 
   if (isComplete) {
     showScreen('complete-screen');
