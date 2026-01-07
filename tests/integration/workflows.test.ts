@@ -186,7 +186,7 @@ describe('Workout Tracker - Full Workflows', () => {
       expect(state.pullups.current).toBe(3);
 
       // Mock confirm to return true
-      vi.spyOn(window, 'confirm').mockReturnValue(true);
+      vi.stubGlobal('confirm', () => true);
 
       resetWorkout();
 
@@ -206,7 +206,7 @@ describe('Workout Tracker - Full Workflows', () => {
       decrementExercise('pullups', -2);
 
       // Mock confirm to return false
-      vi.spyOn(window, 'confirm').mockReturnValue(false);
+      vi.stubGlobal('confirm', () => false);
 
       resetWorkout();
 
