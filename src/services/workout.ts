@@ -24,11 +24,15 @@ function formatTime(ms: number): string {
 export function startTimer(): void {
   timerStartTime = Date.now() - timerPausedAt;
   isTimerPaused = false;
+  state.isTimerPaused = false;
+  saveSession(state);
   updateTimerButton(false);
 
   if (timerInterval !== null) clearInterval(timerInterval);
   timerInterval = window.setInterval(() => {
     const elapsed = Date.now() - timerStartTime;
+    state.elapsedTime = elapsed;
+    saveSession(state);
     updateTimerDisplay(formatTime(elapsed));
   }, 100);
 }
@@ -40,6 +44,9 @@ export function pauseTimer(): void {
   }
   timerPausedAt = Date.now() - timerStartTime;
   isTimerPaused = true;
+  state.elapsedTime = timerPausedAt;
+  state.isTimerPaused = true;
+  saveSession(state);
   updateTimerButton(true);
 }
 
@@ -70,6 +77,8 @@ export let state: WorkoutState = {
   pullups: { total: 0, current: 0, originalTarget: 0 },
   pushups: { total: 0, current: 0, originalTarget: 0 },
   squats: { total: 0, current: 0, originalTarget: 0 },
+  elapsedTime: 0,
+  isTimerPaused: true,
 };
 
 // ============================================================================
@@ -84,6 +93,8 @@ export function startWorkout(e: Event, getFormValues: () => { pullups: number; p
     pullups: { total: pullups, current: pullups, originalTarget: pullups },
     pushups: { total: pushups, current: pushups, originalTarget: pushups },
     squats: { total: squats, current: squats, originalTarget: squats },
+    elapsedTime: 0,
+    isTimerPaused: false,
   };
 
   saveSession(state);
@@ -120,6 +131,8 @@ export function decrementExercise(exercise: string, amount: number): void {
     state[exerciseKey].current = Math.max(0, currentValue + amount);
   }
 
+  // Save elapsed time to state
+  state.elapsedTime = timerPausedAt;
   saveSession(state);
   updateUI();
 }
@@ -133,6 +146,8 @@ export function resetWorkout(): void {
       pullups: { total: 0, current: 0, originalTarget: 0 },
       pushups: { total: 0, current: 0, originalTarget: 0 },
       squats: { total: 0, current: 0, originalTarget: 0 },
+      elapsedTime: 0,
+      isTimerPaused: true,
     };
     resetForm();
     showScreen('setup-screen');
@@ -157,6 +172,8 @@ export function completeWorkout(): void {
     pullups: { total: 0, current: 0, originalTarget: 0 },
     pushups: { total: 0, current: 0, originalTarget: 0 },
     squats: { total: 0, current: 0, originalTarget: 0 },
+    elapsedTime: 0,
+    isTimerPaused: true,
   };
   resetForm();
   showScreen('complete-screen');
@@ -196,7 +213,7 @@ export function updateUI(): void {
     updateRepsDisplay(exercise, current, total, originalTarget);
   });
 
-  // Completion is only triggered when user clicks "Workout's DONE!" in the dialog
+  // Completion is only triggered when user clicks "Done!" in the dialog
   // This allows users to continue with bonus reps even after reaching 0
 }
 
@@ -207,6 +224,19 @@ export function loadWorkoutState(): void {
     Object.assign(state, saved);
     updateUI();
     showScreen('workout-screen');
+    
+    // Restore timer from state
+    if (saved.elapsedTime) {
+      timerPausedAt = saved.elapsedTime;
+      updateTimerDisplay(formatTime(timerPausedAt));
+    }
+    
+    // Resume timer if it was running before reload
+    if (!saved.isTimerPaused) {
+      startTimer();
+    } else {
+      updateTimerButton(true);
+    }
   } else {
     showScreen('setup-screen');
   }

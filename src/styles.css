@@ -284,6 +284,16 @@ body {
     background-color: #3a3a3a;
 }
 
+.btn-success {
+    background-color: var(--color-success);
+    color: #000000;
+    font-weight: 700;
+}
+
+.btn-success:active {
+    background-color: #40c057;
+}
+
 .btn-minus {
     background-color: var(--color-secondary);
     color: var(--color-text);

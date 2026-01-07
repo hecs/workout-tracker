@@ -12,4 +12,6 @@ export interface WorkoutState {
   pullups: ExerciseData;
   pushups: ExerciseData;
   squats: ExerciseData;
+  elapsedTime: number;
+  isTimerPaused: boolean;
 }

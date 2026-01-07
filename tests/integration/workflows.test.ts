@@ -275,4 +275,41 @@ describe('Workout Tracker - Full Workflows', () => {
       expect(state.pullups.total).toBe(0);
     });
   });
+
+  describe('Timer persistence', () => {
+    it('should save elapsed time to state when decrementing', () => {
+      const mockEvent = new Event('submit') as Event;
+      startWorkout(mockEvent, () => ({ pullups: 10, pushups: 15, squats: 20 }));
+
+      // Decrement an exercise
+      decrementExercise('pullups', -1);
+
+      // Check that elapsedTime is in state
+      const saved = loadSession();
+      expect(saved?.elapsedTime).toBeDefined();
+      expect(saved?.elapsedTime).toBeGreaterThanOrEqual(0);
+    });
+
+    it('should restore elapsed time when reloading workout', () => {
+      // Start and save a workout with elapsed time
+      const mockEvent = new Event('submit') as Event;
+      startWorkout(mockEvent, () => ({ pullups: 10, pushups: 15, squats: 20 }));
+
+      // Manually set elapsed time in state to simulate passage of time
+      state.elapsedTime = 5000; // 5 seconds
+      saveSession(state);
+
+      // Reset state
+      state.pullups = { total: 0, current: 0, originalTarget: 0 };
+      state.pushups = { total: 0, current: 0, originalTarget: 0 };
+      state.squats = { total: 0, current: 0, originalTarget: 0 };
+      state.elapsedTime = 0;
+
+      // Load workout state
+      loadWorkoutState();
+
+      // Check that elapsed time was restored
+      expect(state.elapsedTime).toBe(5000);
+    });
+  });
 });

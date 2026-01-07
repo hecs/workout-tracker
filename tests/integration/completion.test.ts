@@ -114,7 +114,7 @@ describe('Completion Dialog Integration', () => {
           expect(resetBtn.textContent).toBe('Reset');
         }
         if (doneBtn) {
-          expect(doneBtn.textContent).toBe("Workout's DONE!");
+          expect(doneBtn.textContent).toBe("Done!");
         }
       }
     });
